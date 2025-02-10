@@ -7,3 +7,5 @@ mediapipe_cache/
 MP_Data/
 *.npy
 cv2_tmp/
+*.pyc
+__pychache__
