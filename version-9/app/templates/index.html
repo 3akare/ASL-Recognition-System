@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hand Gesture Detection</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      width: 100vw; height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    h1 { margin-bottom: 20px; }
+    button {
+      padding: 10px 20px; margin: 5px;
+      font-size: 16px; cursor: pointer;
+    }
+    #status { margin-top: 20px; font-size: 18px; }
+    p#text {
+      color: rgba(0,0,0,0.7); width: 80%;
+      height: 200px; overflow-y: auto;
+      border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;
+    }
+    .highlight { background-color: yellow; }
+  </style>
+</head>
+<body>
+  <h1>Hand Gesture Detection</h1>
+  <p id="text">Predicted Text Will Appear Here</p>
+  <div>
+    <button id="start-webcam">Start Webcam</button>
+    <button id="stop-webcam" disabled>Stop Webcam</button>
+    <button id="send-webcam" disabled>Send Data</button>
+    <button id="playButton">Play</button>
+  </div>
+  <div id="status">Status: Ready</div>
+  <script>
+    const startBtn = document.getElementById("start-webcam");
+    const stopBtn = document.getElementById("stop-webcam");
+    const sendBtn = document.getElementById("send-webcam");
+    const statusDiv = document.getElementById("status");
+    const textElement = document.getElementById("text");
+
+    function updateStatus(message, isError = false) {
+      statusDiv.textContent = `Status: ${message}`;
+      statusDiv.style.color = isError ? "red" : "green";
+    }
+
+    startBtn.addEventListener("click", async () => {
+      startBtn.disabled = true;
+      updateStatus("Starting webcam...");
+      try {
+        const response = await fetch("/start", { method: "POST" });
+        const json = await response.json();
+        updateStatus(json.status);
+        stopBtn.disabled = false;
+        sendBtn.disabled = false;
+      } catch (error) {
+        updateStatus(error.message, true);
+      } finally {
+        startBtn.disabled = false;
+      }
+    });
+
+    stopBtn.addEventListener("click", async () => {
+      stopBtn.disabled = true;
+      updateStatus("Stopping webcam...");
+      try {
+        const response = await fetch("/stop", { method: "POST" });
+        const json = await response.json();
+        updateStatus(json.status);
+        sendBtn.disabled = true;
+      } catch (error) {
+        updateStatus(error.message, true);
+      } finally {
+        stopBtn.disabled = true;
+      }
+    });
+
+    sendBtn.addEventListener("click", async () => {
+      sendBtn.disabled = true;
+      updateStatus("Sending data...");
+      try {
+        const response = await fetch("/send", { method: "POST" });
+        const json = await response.json();
+        updateStatus(json.status);
+        textElement.textContent = json.response;
+      } catch (error) {
+        updateStatus(error.message, true);
+      } finally {
+        sendBtn.disabled = true;
+        stopBtn.disabled = true;
+      }
+    });
+
+    document.getElementById('playButton').addEventListener('click', () => {
+      const text = textElement.innerText;
+      const utterance = new SpeechSynthesisUtterance(text);
+      const words = text.split(' ');
+      textElement.innerHTML = words.map(word => `<span>${word}</span>`).join(' ');
+      const spans = textElement.querySelectorAll('span');
+      let currentIndex = 0;
+      utterance.onboundary = (event) => {
+        spans.forEach(span => span.classList.remove('highlight'));
+        if (spans[currentIndex]) {
+          spans[currentIndex].classList.add('highlight');
+        }
+        currentIndex++;
+      };
+      window.speechSynthesis.speak(utterance);
+    });
+  </script>
+</body>
+</html>
+

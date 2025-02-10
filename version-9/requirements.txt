@@ -1,0 +1,8 @@
+Flask
+grpcio
+grpcio-tools
+opencv-python
+mediapipe
+numpy
+tensorflow
+scikit-learn

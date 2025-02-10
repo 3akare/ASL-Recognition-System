@@ -1,0 +1,9 @@
+logs/
+*.log
+debug.log
+.DS_Store
+Thumbs.db
+mediapipe_cache/
+MP_Data/
+*.npy
+cv2_tmp/
