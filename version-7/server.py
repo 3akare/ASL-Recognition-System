@@ -24,25 +24,7 @@ class SignDataServer(signData_pb2_grpc.StreamDataServiceServicer):
                 response_string += predicted_character
         except Exception:
             pass
-        return signData_pb2.ResponseMessage(reply="""The sun awakens, soft and bright,
-            Chasing away the fading night.
-            The morning sings with chirping cheer,
-            A gentle call, "The day is here."
-            
-            The breeze it whispers through the trees,
-            Dancing lightly with the leaves.
-            A song of calm, a sweet refrain,
-            A touch of joy, a soft refrain.
-            
-            The clouds drift by, their shadows play,
-            Upon the fields, where children stay.
-            Their laughter rings, a happy tune,
-            Beneath the warm embrace of noon.
-            
-            So listen close, the world’s alive,
-            Each moment hums, each second thrives.
-            A melody for all to hear,
-            A voice that whispers, "Life is near.""")
+        return signData_pb2.ResponseMessage(reply=response_string)
 
 
 def serve():

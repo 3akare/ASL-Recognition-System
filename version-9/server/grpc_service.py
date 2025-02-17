@@ -3,7 +3,7 @@ from concurrent import futures
 import grpc
 import time
 import signData_pb2_grpc
-from .service import SignDataService
+from service import SignDataService
 
 def serve():
     """

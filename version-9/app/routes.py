@@ -4,8 +4,8 @@ from flask import Blueprint, render_template, jsonify, current_app
 from datetime import datetime
 
 # Import our singleton CameraHandler and gRPC client
-from .camera import camera_handler
-from .grpc_client import send_gesture_sequences
+from camera import camera_handler
+from grpc_client import send_gesture_sequences
 
 main_bp = Blueprint('main', __name__)
 

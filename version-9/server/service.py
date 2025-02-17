@@ -5,12 +5,10 @@ import os
 import signData_pb2
 import signData_pb2_grpc
 
-# Define the action labels (should match your training)
 ACTIONS = ["hello", "thanks", "iloveyou"]
 label_map = {i: action for i, action in enumerate(ACTIONS)}
 
-# Load the trained model (ensure the path is correct)
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'models', 'action.h5')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'model', 'models', 'action.h5')
 model = tf.keras.models.load_model(MODEL_PATH)
 
 class SignDataService(signData_pb2_grpc.StreamDataServiceServicer):

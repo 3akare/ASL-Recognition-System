@@ -2,7 +2,7 @@
 import cv2
 import threading
 import mediapipe as mp
-from common import gesture_utils
+import gesture_utils
 
 class CameraHandler:
     """
@@ -53,12 +53,7 @@ class CameraHandler:
                 self.buffer.append(keypoints)
                 if len(self.buffer) == self.sequence_length:
                     self.sequences.append(list(self.buffer))
-                    self.buffer = []
-            
-            # Optional: show webcam feed for debugging (remove in production)
-            cv2.imshow("Webcam", frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                self.running = False
+                    self.buffer = []            
         cap.release()
         cv2.destroyAllWindows()
     
